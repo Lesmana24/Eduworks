@@ -45,7 +45,7 @@ class ProductController extends Controller
         $query->latest();
     }
 
-    
+
         $products = $query->paginate(4)->withQueryString();
         $categories = Categories::all();
         return view('dashboard.products.index' , compact('products', 'categories'));
