@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;       // Controller untuk Pengunjung (Public)
 use App\Http\Controllers\AdminProductController;  // Controller untuk Admin (CRUD)
-// Pastikan nama file controller kategori kamu 'CategoriesController.php'
 use App\Http\Controllers\CategoriesController as CategoryController;
+use App\Http\Controllers\AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +26,9 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+Route::middleware('auth','admin')->group(function () {
+    // Dashboard Admin
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

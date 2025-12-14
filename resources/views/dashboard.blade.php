@@ -17,13 +17,13 @@
             </div>
 
             {{-- GRID CARDS (Ganti row/col bootstrap dengan Grid Tailwind) --}}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 {{-- Card 1: Products --}}
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Total Products</h3>
-                        <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">120</p>
+                        <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $jumlahProduk}}</p>
                         <p class="text-l font-bold text-indigo-600 dark:text-indigo-400">Jumlah Product Yang Tersedia</p>
                         <a href="{{ route('products-admin') }}" class="inline-block mt-4 text-sm text-indigo-600 hover:text-indigo-900">View Details &rarr;</a>
                     </div>
@@ -33,7 +33,7 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Total Categories</h3>
-                        <p class="text-3xl font-bold text-green-600 dark:text-green-400">8</p>
+                        <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $jumlahKategori }}</p>
                         <p class="text-l font-bold text-green-600 dark:text-green-400">Jumlah Category Yang Tersedia</p>
                         <a href="{{ route('categories-admin') }}" class="inline-block mt-4 text-sm text-green-600 hover:text-green-900">View Details &rarr;</a>
                     </div>
@@ -43,10 +43,21 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Pengguna</h3>
-                        <p class="text-3xl font-bold text-gray-600 dark:text-gray-400">100</p>
+                        <p class="text-3xl font-bold text-gray-600 dark:text-gray-400">{{ $jumlahUser }}</p>
                         <p class="text-l font-bold text-gray-600 dark:text-gray-400">Jumlah Pengguna</p>
                         <a href="#" class="inline-block mt-4 text-sm text-gray-600 hover:text-gray-900">View Details &rarr;</a>
 
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Total Product Views</h3>
+                        {{-- Pastikan variabel $totalKlik dikirim dari controller --}}
+                        <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $jumlahKlikProduk ?? 0 }}</p>
+                        <p class="text-l font-bold text-red-600 dark:text-red-400">Total Diklik Pengunjung</p>
+                        <a href="#" class="inline-block mt-4 text-sm text-red-600 hover:text-red-900">View Details &rarr;</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
