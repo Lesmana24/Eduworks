@@ -7,6 +7,9 @@ use App\Http\Controllers\ProductController;       // Controller untuk Pengunjung
 use App\Http\Controllers\AdminProductController;  // Controller untuk Admin (CRUD)
 use App\Http\Controllers\CategoriesController as CategoryController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\CartController; // Jangan lupa import ini di paling atas
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +17,21 @@ use App\Http\Controllers\AdminDashboardController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/cart', [HomeController::class, 'cart'])->name('cart');
 
 // Halaman Produk untuk Pengunjung (Hanya View & Show)
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+// ... route lainnya ...
+
+// Route Tambah ke Keranjang
+Route::post('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
+
+// Halaman Cart (Update route yang sudah ada agar mengarah ke CartController jika mau)
+Route::get('/cart', [CartController::class, 'cart'])->name('cart');
+// Tambahkan di bawah route cart yang sudah ada
+Route::patch('/update-cart', [CartController::class, 'updateCart'])->name('update.cart');
+Route::delete('/remove-from-cart', [CartController::class, 'removeCart'])->name('remove.from.cart');
+Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
 /*
 |--------------------------------------------------------------------------

@@ -51,11 +51,11 @@
                 </div>
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Total Product Views</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Total Checkout Product</h3>
                         {{-- Pastikan variabel $totalKlik dikirim dari controller --}}
                         <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $jumlahKlikProduk ?? 0 }}</p>
-                        <p class="text-l font-bold text-red-600 dark:text-red-400">Total Diklik Pengunjung</p>
-                        <a href="#" class="inline-block mt-4 text-sm text-red-600 hover:text-red-900">View Details &rarr;</a>
+                        <p class="text-l font-bold text-red-600 dark:text-red-400">Total Produk Yang Dicheckout</p>
+                        <a href="{{ route('products-admin') }}" class="inline-block mt-4 text-sm text-red-600 hover:text-red-900">View Details &rarr;</a>
                     </div>
                 </div>
             </div>

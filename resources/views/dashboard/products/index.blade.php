@@ -12,10 +12,17 @@
             <li class="breadcrumb-item active" aria-current="page">Semua Produk</li>
         </ol>
     </nav>
-
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        {{ session('success') }}
+        <a href="{{ route('cart') }}" class="fw-bold text-decoration-underline">Lihat Keranjang</a>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
     <div class="row">
         {{-- SIDEBAR FILTER (Kiri) --}}
 <div class="col-lg-3 mb-4">
+
 
     {{-- Tombol Filter Mobile --}}
     <button class="btn btn-primary d-lg-none w-100 mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
@@ -206,15 +213,32 @@
             </div>
 
             {{-- Tombol Keranjang --}}
-            <div class="card-footer bg-transparent border-top-0 p-2 pb-3">
-                <div class="d-grid">
-                    {{-- Di Mobile text tombol disembunyikan, cuma ikon (biar muat) --}}
-                    <button class="btn btn-outline-primary btn-sm rounded-pill">
-                        <i class="fa-solid fa-cart-plus"></i>
-                        <span class="d-none d-md-inline ms-1">+ Keranjang</span>
-                    </button>
-                </div>
-            </div>
+<div class="card-footer bg-transparent border-top-0 p-2 pb-3">
+    <div class="d-grid">
+        {{-- BUNGKUS TOMBOL DENGAN FORM --}}
+        {{-- Form Add to Cart --}}
+{{-- Form Add to Cart --}}
+<form action="{{ route('add.to.cart', $item->id) }}" method="POST" class="form-add-to-cart">
+    @csrf
+
+    <div class="d-flex gap-2 align-items-center mb-2">
+        {{-- Input Jumlah (Quantity) --}}
+        <input type="number"
+               name="quantity"
+               value="1"
+               min="1"
+               class="form-control form-control-sm text-center"
+               style="width: 60px;">
+
+        {{-- Tombol Submit --}}
+        <button type="submit" class="btn btn-primary btn-sm rounded-pill flex-fill btn-add-click">
+            <i class="fa-solid fa-cart-plus"></i>
+            <span class="d-none d-md-inline ms-1">+ Keranjang</span>
+        </button>
+    </div>
+</form>
+    </div>
+</div>
 
         </div>
     </div>
@@ -238,4 +262,57 @@
         transform: translateY(-5px);
     }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.form-add-to-cart').on('submit', function(e) {
+            e.preventDefault(); // Mencegah reload halaman
+
+            var form = $(this);
+            var actionUrl = form.attr('action');
+            var button = form.find('.btn-add-click');
+
+            // Ubah tombol jadi loading (opsional)
+            var originalText = button.html();
+            button.html('<i class="fa-solid fa-spinner fa-spin"></i> Loading...');
+            button.prop('disabled', true);
+
+            $.ajax({
+                url: actionUrl,
+                type: 'POST',
+                data: form.serialize(), // Kirim data form (termasuk CSRF token)
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // 1. Update Angka Badge Navbar
+                        $('#cart-badge').text(response.total_items);
+                        $('#cart-badge').removeClass('d-none'); // Munculkan badge jika sebelumnya hidden
+
+                        // 2. Tampilkan Notifikasi (Toast / SweetAlert)
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    alert('Terjadi kesalahan, coba lagi.');
+                },
+                complete: function() {
+                    // Kembalikan tombol seperti semula
+                    button.html(originalText);
+                    button.prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
 @endsection

@@ -30,6 +30,7 @@
                                 <th class="px-6 py-3">Category</th>
                                 <th class="px-6 py-3">Price</th>
                                 <th class="px-6 py-3">Stock</th>
+                                <th class="px-6 py-3">Checkout</th>
                                 <th class="px-6 py-3">Action</th>
                             </tr>
                         </thead>
@@ -48,6 +49,7 @@
                                 <td class="px-6 py-4">{{ $product->category->name ?? '-' }}</td>
                                 <td class="px-6 py-4">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                                 <td class="px-6 py-4">{{ $product->stock }}</td>
+                                <td class="px-6 py-4">{{ $product->click }}</td>
                                 <td class="px-6 py-4 flex gap-2">
                                     <a href="{{ route('products.edit', $product) }}" class="text-blue-600 hover:text-blue-900">Edit</a>
                                     <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Delete this product?');">

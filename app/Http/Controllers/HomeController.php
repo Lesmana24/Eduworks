@@ -13,6 +13,7 @@ class HomeController extends Controller
         return view('dashboard.home', compact('products'));
     }
 
+    
     public function cart()
     {
         return view('dashboard.cart');
