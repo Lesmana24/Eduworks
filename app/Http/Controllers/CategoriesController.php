@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Categories as Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('products')->latest()->get();
+        $categories = Category::withCount('products')->paginate(10);
         return view('admin.categories.index', compact('categories'));
     }
 

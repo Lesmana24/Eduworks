@@ -21,7 +21,6 @@ class Product extends Model
     // Relasi ke Category
     public function category()
     {
-        // Sesuaikan 'Categories::class' dengan nama file model kategori kamu
         return $this->belongsTo(Categories::class, 'category_id');
     }
 }

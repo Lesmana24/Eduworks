@@ -12,7 +12,7 @@ class AdminProductController extends Controller
     // Menampilkan Tabel Produk (Admin)
     public function index()
     {
-        $products = Product::with('category')->latest()->get();
+        $products = Product::with('category')->paginate(10);
         // Pastikan view-nya mengarah ke folder admin
         return view('admin.products.index', compact('products'));
     }

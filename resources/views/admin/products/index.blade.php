@@ -59,6 +59,11 @@
                             @endforeach
                         </tbody>
                     </table>
+    <div class="mt-5 px-4">
+    {{-- Pakai 'pagination::tailwind' --}}
+    {{ $products->onEachSide(1)->links('pagination::tailwind') }}
+</div>
+
                 </div>
             </div>
         </div>
