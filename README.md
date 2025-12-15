@@ -79,7 +79,7 @@ This project has been optimized for shared hosting where SSH access is limited:
 
 | Admin Dashboard | Product List |
 | :---: | :---: |
-| ![Admin Dashboard](image1.png) | ![Product List](path/to/image.png) |
+| ![Admin Dashboard](image1.png) | ![Product List](image.png) |
 
 ## 👨‍💻 Author
 
