@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Categories;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class AdminProductController extends Controller
 {
-    // Menampilkan Tabel Produk (Admin)
     public function index()
     {
         $products = Product::with('category')->paginate(10);
-        // Pastikan view-nya mengarah ke folder admin
         return view('admin.products.index', compact('products'));
     }
 
@@ -23,6 +21,7 @@ class AdminProductController extends Controller
         return view('admin.products.create', compact('categories'));
     }
 
+    // --- STORE (SIMPAN) ---
     public function store(Request $request)
     {
         $request->validate([
@@ -36,7 +35,23 @@ class AdminProductController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // INI KUNCINYA: Kita taruh di public/storage/products
+            $path = public_path('storage/products');
+
+            // Buat folder otomatis kalau belum ada (jaga-jaga)
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // Pindahkan file
+            $file->move($path, $filename);
+
+            // Simpan di DB tetap 'products/namafile.jpg'
+            // Supaya pas dipanggil asset('storage/' . $product->image) hasilnya PAS
+            $data['image'] = 'products/' . $filename;
         }
 
         Product::create($data);
@@ -50,6 +65,7 @@ class AdminProductController extends Controller
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
+    // --- UPDATE (EDIT) ---
     public function update(Request $request, Product $product)
     {
         $request->validate([
@@ -63,10 +79,23 @@ class AdminProductController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            // Hapus gambar lama di folder 'public/storage/products'
+            $oldPath = public_path('storage/' . $product->image);
+            if ($product->image && file_exists($oldPath)) {
+                unlink($oldPath);
             }
-            $data['image'] = $request->file('image')->store('products', 'public');
+
+            // Upload gambar baru
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = public_path('storage/products');
+
+             if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            $file->move($path, $filename);
+            $data['image'] = 'products/' . $filename;
         }
 
         $product->update($data);
@@ -74,10 +103,12 @@ class AdminProductController extends Controller
         return redirect()->route('products-admin')->with('success', 'Product updated successfully.');
     }
 
+    // --- DESTROY (HAPUS) ---
     public function destroy(Product $product)
     {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        $path = public_path('storage/' . $product->image);
+        if ($product->image && file_exists($path)) {
+            unlink($path);
         }
 
         $product->delete();
